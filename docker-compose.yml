@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  mysqldb:
+    image: mysql:8.0.17
+    ports:
+      - "10000:3306"
+    expose:
+      - "10000"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=dockeruser
+      - MYSQL_PASSWORD=dockeruser
+      - MYSQL_DATABASE=ecom
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+    # volumes:
+    #   - ecom-datavolume:/var/lib/ecom
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/usr/src/app
+    ports:
+      - 5001:80
+    depends_on:
+      - mysqldb
+
+# volumes:
+#   ecom-datavolume:
