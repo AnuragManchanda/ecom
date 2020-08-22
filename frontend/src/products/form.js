@@ -15,15 +15,15 @@ const tailLayout = {
 
 const ProductForm = () => {
   const onFinish = values => {
-    axios.post('http://localhost:3001/products', values).then((res) => {
-      history.push(`/products/${res.product.id}`)
+    axios.post('http://localhost:5001/products', values).then((res) => {
+      history.push(`/products/${res.data.id}`)
     })
   };
 
   const onFinishFailed = errorInfo => {
     console.log('Failed:', errorInfo);
   };
-  
+
   return (
     <Form
       {...layout}
