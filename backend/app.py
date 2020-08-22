@@ -19,18 +19,14 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(ROOT_DIR, "uploads")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@mysqldb/ecom'
-
 db = SQLAlchemy(app)
 migrate(db)
 ma = Marshmallow(app)
-
-db = SQLAlchemy()
 
 class Image(db.Model):
     __tablename__ = 'images'
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String, unique=True, nullable=False)
-
 
 product_images = db.Table('product_images',
                           db.Column('product_id', db.Integer,
@@ -45,7 +41,6 @@ product_variant_images = db.Table('product_variant_images',
                                   db.Column('image_id', db.Integer,
                                             db.ForeignKey('images.id'))
                                   )
-
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
@@ -56,20 +51,18 @@ class Product(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     images = db.relationship('Image', secondary=product_images, lazy='subquery')
     variants = db.relationship('ProductVariant', lazy='subquery')
-
+    logo = db.relationship('Image', lazy='subquery')
 
 class ProductVariant(db.Model):
     __tablename__ = 'product_variants'
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     name = db.Column(db.String(255), nullable=False)
-
     size = db.Column(db.String)
     color = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     images = db.relationship('Image', secondary=product_variant_images, lazy='subquery')
-
 
 class ImageSchema(ModelSchema):
     class Meta:
@@ -78,11 +71,11 @@ class ImageSchema(ModelSchema):
 
 class ProductVariantSchema(ModelSchema):
     images = ma.Nested(ImageSchema, many=True)
-
     class Meta:
         model = ProductVariant
 
 class ProductSchema(ModelSchema):
+    logo = ma.Nested(ImageSchema)
     images = ma.Nested(ImageSchema, many=True)
     variants = ma.Nested(ProductVariantSchema, many=True)
     class Meta:
