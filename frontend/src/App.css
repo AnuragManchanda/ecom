@@ -1,0 +1,15 @@
+@import "~antd/dist/antd.css";
+
+#root {
+  height: 100%;
+}
+
+.ant-layout.layout {
+  height: inherit;
+}
+
+.site-layout-content {
+  background: #fff;
+  padding: 24px;
+  /* min-height: 280px; */
+}
