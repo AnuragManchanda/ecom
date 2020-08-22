@@ -28,7 +28,7 @@ def migrate(db):
 
     db.engine.execute(
         """CREATE TABLE IF NOT EXISTS product_variants (
-            id INT PRIMARY KEY,
+            id INT PRIMARY KEY AUTO_INCREMENT,
             product_id INT,
             name VARCHAR(255),
             size VARCHAR(255),
