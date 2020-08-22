@@ -12,8 +12,6 @@ from migration import migrate
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 
-import time
-time.sleep(5)
 app = Flask(__name__)
 CORS(app)
 
@@ -48,7 +46,6 @@ product_variant_images = db.Table('product_variant_images',
                                             db.ForeignKey('images.id'))
                                   )
 
-
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
@@ -57,8 +54,8 @@ class Product(db.Model):
     description = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    images = db.relationship('Image', secondary=product_images, lazy='subquery',
-                             backref=db.backref('products', lazy=True))
+    images = db.relationship('Image', secondary=product_images, lazy='subquery')
+    variants = db.relationship('ProductVariant', lazy='subquery')
 
 
 class ProductVariant(db.Model):
@@ -71,20 +68,25 @@ class ProductVariant(db.Model):
     color = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    images = db.relationship('Image', secondary=product_variant_images, lazy='subquery',
-                             backref=db.backref('product_varaints', lazy=True))
+    images = db.relationship('Image', secondary=product_variant_images, lazy='subquery')
 
-class ProductSchema(ModelSchema):
-    class Meta:
-        model = Product
-
-class ProductVariantSchema(ModelSchema):
-    class Meta:
-        model = ProductVariant
 
 class ImageSchema(ModelSchema):
     class Meta:
         model = Image
+
+
+class ProductVariantSchema(ModelSchema):
+    images = ma.Nested(ImageSchema, many=True)
+
+    class Meta:
+        model = ProductVariant
+
+class ProductSchema(ModelSchema):
+    images = ma.Nested(ImageSchema, many=True)
+    variants = ma.Nested(ProductVariantSchema, many=True)
+    class Meta:
+        model = Product
 
 
 @app.route('/image', methods=['POST'])
