@@ -9,7 +9,7 @@ const Products = () => {
 
   useEffect(
     () => {
-      axios.get('http://localhost:3001/products').then((res) => {
+      axios.get('http://localhost:5001/products').then((res) => {
         setProducts(res.data.products);
         setIsLoading(false);
       })

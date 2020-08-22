@@ -7,3 +7,4 @@ flask_sqlalchemy
 flask_migrate
 marshmallow-sqlalchemy
 flask-marshmallow
+flask_cors

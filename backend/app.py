@@ -6,10 +6,12 @@ from flask import Flask, jsonify, request, send_from_directory, redirect, url_fo
 from flask_sqlalchemy import SQLAlchemy
 from migration import migrate
 from flask_marshmallow import Marshmallow
+from flask_cors import CORS
 
 import time
 time.sleep(5)
 app = Flask(__name__)
+CORS(app)
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(ROOT_DIR, "uploads")
@@ -57,12 +59,15 @@ def product_update(id):
 
 @app.route('/products', methods=['POST'])
 def product_create():
+    import code
+    code.interact(local=dict(globals(), **locals()))
     product = Product(
-        name=request.json['name'],
-        description=request.json['description'],
+    name=request.json['name'],
+    description=request.json['description'],
     )
+    db.session.add(product)
     db.session.commit()
-    return jsonify({'product': ProductSchema().dump(product)})
+    return jsonify(ProductSchema().dump(product))
     # product_schema = ProductSchema(many=True)
     # output = product_schema.dump(products)
     # if 'logo' in request.files:
