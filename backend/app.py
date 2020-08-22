@@ -18,8 +18,6 @@ product_images = db.Table('product_images',
     db.Column('image_id', db.Integer, db.ForeignKey('images.id'))
     )
 
-from models.products import models
-
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
@@ -39,7 +37,6 @@ class Image(db.Model):
 class ProductSchema(ModelSchema):
     class Meta:
         model = Product
-
 
 # 5. Query products and variants
 @app.route('/products')

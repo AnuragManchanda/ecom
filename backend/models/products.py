@@ -1,4 +1,4 @@
-from import db
+from  backend import db
 
 class Product(db.Model):
     __tablename__ = 'products'
