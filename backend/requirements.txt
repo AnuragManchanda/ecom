@@ -3,3 +3,7 @@ flask-restful
 flask-mysql
 cryptography
 flask_mysqldb
+flask_sqlalchemy
+flask_migrate
+marshmallow-sqlalchemy
+flask-marshmallow
