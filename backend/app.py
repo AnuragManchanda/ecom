@@ -1,7 +1,7 @@
 import os
 from werkzeug.utils import secure_filename
 
-from models.schema import Product, ProductSchema
+from models.schema import Product, ProductSchema, Image, ImageSchema
 from flask import Flask, jsonify, request, send_from_directory, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from migration import migrate
@@ -24,12 +24,13 @@ ma = Marshmallow(app)
 
 @app.route('/image', methods=['POST'])
 def upload_file():
-    file = request.files['file']
+    file = request.files['image']
     filename = secure_filename(file.filename)
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    return url_for('uploaded_file',
-                            filename=filename)
-
+    image = Image(url=url_for('uploaded_file',filename=filename))
+    db.session.add(image)
+    db.session.commit()
+    return jsonify({'image': ImageSchema().dump(image)})
 
 @app.route('/image/<filename>')
 def uploaded_file(filename):
@@ -39,50 +40,50 @@ def uploaded_file(filename):
 @app.route('/products')
 def product_index():
     products = Product.query.all()
-    product_schema = ProductSchema(many=True)
-    return jsonify({'products': product_schema.dump(products)})
+    return jsonify({'products': ProductSchema(many=True).dump(products)})
 
 @app.route('/products/<id>/')
 def product_show(id):
     product = Product.query.get(id)
-    product_schema = ProductSchema()
-    output = product_schema.dump(product)
-    return jsonify({'product': output})
+    return jsonify(ProductSchema().dump(product))
 
 @app.route('/products/<id>/', methods = ['PUT'])
 def product_update(id):
-    product = Product.query.get(id)
+    import code
+    code.interact(local=dict(globals(), **locals()))
+
+    # product = Product.query.get(id)
     product.name = request.json['name']
     product.description = request.json['description']
+    product.logo_id = request.json['logo_id']
+    if request.json['images']:
+        product.images.delete()
+        for image_id in request.json['images']:
+            image = Image.query.get(image_id)
+            product.images.append(image)
+
     db.session.commit()
-    return jsonify({'product': ProductSchema().dump(product)})
+    return jsonify(ProductSchema().dump(product))
+
+@app.route('/images')
+def image_index():
+    images = Image.query.all()
+    return jsonify({'images': ImageSchema(many=True).dump(images)})
 
 @app.route('/products', methods=['POST'])
 def product_create():
-    import code
-    code.interact(local=dict(globals(), **locals()))
     product = Product(
-    name=request.json['name'],
-    description=request.json['description'],
+        name=request.json['name'],
+        description=request.json['description'],
+        logo_id=request.json['logo_id']
     )
-    db.session.add(product)
+    if request.json['images']:
+        for image_id in request.json['images']:
+            image = Image.query.get(image_id)
+            product.images.append(image)
+
     db.session.commit()
     return jsonify(ProductSchema().dump(product))
-    # product_schema = ProductSchema(many=True)
-    # output = product_schema.dump(products)
-    # if 'logo' in request.files:
-    #     import code
-    #     code.interact(local=dict(globals(), **locals()))
-    #     file = request.files['logo']
-    #     filename = secure_filename(file.filename)
-    #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    # product.logo = filename
-
-#     # as for logo_url
-#     logo_url
-#     search in images __tablename__
-#     add that id to logo_id
-
 
 # 1. Create/Update a product  -> post put
 # 2. Create multiple variants under a product

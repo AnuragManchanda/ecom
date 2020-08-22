@@ -1,5 +1,5 @@
 def migrate(db):
-    print("running migration")
+    # print("running migration")
     # db.engine.execute("drop table if exists product_variant_images;")
     # db.engine.execute("drop table if exists product_images;")
     # db.engine.execute("drop table if exists product_variants;")
@@ -8,7 +8,7 @@ def migrate(db):
 
     db.engine.execute(
         """CREATE TABLE IF NOT EXISTS images (
-            id INT PRIMARY KEY,
+            id INT PRIMARY KEY AUTO_INCREMENT,
             url TEXT);
         """
     )
@@ -17,10 +17,12 @@ def migrate(db):
         """CREATE TABLE IF NOT EXISTS products (
             id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(255),
-            logo TEXT,
+            logo_id INT,
             description TEXT,
             created_at DATETIME,
-            updated_at DATETIME);
+            updated_at DATETIME,
+            FOREIGN KEY (logo_id) REFERENCES images(id)
+            );
         """
     )
 
