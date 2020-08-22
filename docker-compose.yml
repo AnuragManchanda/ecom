@@ -33,5 +33,17 @@ services:
     depends_on:
       - mysqldb
 
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+    expose:
+      - '3000'
+    stdin_open: true
+    depends_on:
+      - backend
+
 # volumes:
 #   ecom-datavolume:
