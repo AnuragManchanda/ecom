@@ -3,7 +3,8 @@ import './App.css';
 import { Layout, Menu } from 'antd';
 import Products from './products';
 import Product from './products/show';
-
+import ProductForm from './products/form';
+import history from './history';
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,9 +13,11 @@ import {
 } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
 
+console.log("history", history);
+
 function App() {
   return (
-    <Router>
+    <Router history={history}>
       <Layout className="layout">
         <Header>
           <div className="logo" />
@@ -25,6 +28,9 @@ function App() {
         <Content style={{ padding: '50px' }}>
           <div className="site-layout-content">
             <Switch>
+              <Route path="/products/new">
+                <ProductForm />
+              </Route>
               <Route path="/products/:id">
                 <Product />
               </Route>

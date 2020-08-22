@@ -56,20 +56,22 @@ def product_update(id):
     return jsonify({'product': ProductSchema().dump(product)})
 
 @app.route('/products', methods=['POST'])
-def product_create(id):
+def product_create():
     product = Product(
         name=request.json['name'],
         description=request.json['description'],
     )
-    product_schema = ProductSchema(many=True)
-    output = product_schema.dump(products)
-    if 'logo' in request.files:
-        import code
-        code.interact(local=dict(globals(), **locals()))
-        file = request.files['logo']
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    product.logo = filename
+    db.session.commit()
+    return jsonify({'product': ProductSchema().dump(product)})
+    # product_schema = ProductSchema(many=True)
+    # output = product_schema.dump(products)
+    # if 'logo' in request.files:
+    #     import code
+    #     code.interact(local=dict(globals(), **locals()))
+    #     file = request.files['logo']
+    #     filename = secure_filename(file.filename)
+    #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    # product.logo = filename
 
 #     # as for logo_url
 #     logo_url
