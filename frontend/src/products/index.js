@@ -33,11 +33,11 @@ const Products = () => {
         dataSource={products}
         renderItem={item => (
           <List.Item
-            key={item.title}
+            key={item.name}
           >
             <Skeleton loading={isLoading}>
               <List.Item.Meta
-                avatar={<Avatar shape="square" size="large" src="https://via.placeholder.com/150" />}
+                avatar={<Avatar shape="square" size="large" src={`http://localhost:5001${item.logo.url}`} />}
                 title={<Link to={`/products/${item.id}`}>{item.name}</Link>}
                 description={item.description}
               />
