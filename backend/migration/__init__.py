@@ -4,11 +4,11 @@ def migrate(db):
     while(True):
         try:
             print("running migration")
-            # db.engine.execute("drop table if exists product_variant_images;")
-            # db.engine.execute("drop table if exists product_images;")
-            # db.engine.execute("drop table if exists product_variants;")
-            # db.engine.execute("drop table if exists products;")
-            # db.engine.execute("drop table if exists images;")
+            db.engine.execute("drop table if exists product_variant_images;")
+            db.engine.execute("drop table if exists product_images;")
+            db.engine.execute("drop table if exists product_variants;")
+            db.engine.execute("drop table if exists products;")
+            db.engine.execute("drop table if exists images;")
 
             db.engine.execute(
                 """CREATE TABLE IF NOT EXISTS images (
