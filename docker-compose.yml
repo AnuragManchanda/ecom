@@ -37,8 +37,8 @@ services:
     build: ./frontend
     ports:
       - 3000:3000
-    volumes:
-      - ./frontend:/app
+    # volumes:
+    #   - ./frontend:/app
     expose:
       - '3000'
     stdin_open: true

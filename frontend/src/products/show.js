@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Spin, Descriptions, List, Avatar, Skeleton, Button } from 'antd';
+import { Spin, Descriptions, List, Skeleton, Button } from 'antd';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const Product = (props) => {
   return (
     isLoading ? <Spin /> :
       <>
-        <img width='50%' shape="square" size="large" src={`http://localhost:5001${product.logo.url}`} />
+        <img width='50%' alt="logo" shape="square" size="large" src={`http://localhost:5001${product.logo.url}`} />
         <Descriptions title="Product Info" layout="vertical">
           <Descriptions.Item label="Name">{product.name}</Descriptions.Item>
           <Descriptions.Item label="Description">{product.description}</Descriptions.Item>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Button } from 'antd';
 import axios from "axios";
-import history from '../history';
 import { useParams } from "react-router-dom";
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
