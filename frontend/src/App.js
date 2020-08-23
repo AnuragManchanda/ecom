@@ -4,6 +4,7 @@ import { Layout, Menu } from 'antd';
 import Products from './products';
 import Product from './products/show';
 import ProductForm from './products/form';
+import ProductVariantForm from './product_variants/form';
 import history from './history';
 import {
   BrowserRouter as Router,
@@ -12,8 +13,6 @@ import {
   Link
 } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
-
-console.log("history", history);
 
 function App() {
   return (
@@ -28,6 +27,9 @@ function App() {
         <Content style={{ padding: '50px' }}>
           <div className="site-layout-content">
             <Switch>
+              <Route path="/products/:id/product_variants/new">
+                <ProductVariantForm />
+              </Route>
               <Route path="/products/new">
                 <ProductForm />
               </Route>

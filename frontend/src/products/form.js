@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button } from 'antd';
 import axios from "axios";
 import history from '../history';
@@ -35,6 +35,8 @@ class Avatar extends React.Component {
       return;
     }
     if (info.file.status === 'done') {
+      this.props.onUpload(info.file.response.image.id);
+
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, imageUrl =>
         this.setState({
@@ -44,6 +46,7 @@ class Avatar extends React.Component {
       );
     }
   };
+
   render() {
     const uploadButton = (
       <div>
@@ -54,7 +57,7 @@ class Avatar extends React.Component {
     const { imageUrl } = this.state;
     return (
       <Upload
-        name="image"
+        name="file"
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
@@ -78,9 +81,12 @@ const tailLayout = {
 };
 
 const ProductForm = () => {
+  const [logoId, setLogoId] = useState([]);
+
   const onFinish = values => {
+    values.logo_id = logoId;
     axios.post('http://localhost:5001/products', values).then((res) => {
-      history.push(`/products/${res.data.id}`)
+      window.location.href = `/products/${res.data.id}`
     })
   };
 
@@ -101,7 +107,7 @@ const ProductForm = () => {
         label="Logo"
         name="Logo"
       >
-        <Avatar />
+        <Avatar onUpload={setLogoId} />
       </Form.Item>
 
       <Form.Item

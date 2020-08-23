@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Spin, Descriptions, List, Avatar, Skeleton } from 'antd';
+import { Spin, Descriptions, List, Avatar, Skeleton, Button } from 'antd';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -27,6 +27,7 @@ const Product = (props) => {
           <Descriptions.Item label="Name">{product.name}</Descriptions.Item>
           <Descriptions.Item label="Description">{product.description}</Descriptions.Item>
         </Descriptions>
+        <Button type="primary"><Link to={`/products/${id}/product_variants/new`}>New Product Variant</Link></Button>
 
         <List
           itemLayout="vertical"
@@ -51,7 +52,7 @@ const Product = (props) => {
                 {
                   item.images.map((image) => {
                   return (
-                    <img key={image.name} src={`http://localhost:5001${image.url}`} />
+                    <img key={image.name} height="200" src={`http://localhost:5001${image.url}`} />
                     )
                   })
                 }

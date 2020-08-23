@@ -1,12 +1,12 @@
 @import "~antd/dist/antd.css";
 
-#root {
-  height: 100%;
+/* #root {
+  height: 100vh;
 }
 
 .ant-layout.layout {
   height: inherit;
-}
+} */
 
 .site-layout-content {
   background: #fff;

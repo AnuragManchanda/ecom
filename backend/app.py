@@ -84,7 +84,7 @@ class ProductSchema(ModelSchema):
 
 @app.route('/image', methods=['POST'])
 def upload_file():
-    file = request.files['image']
+    file = request.files['file']
     filename = secure_filename(file.filename)
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     image = Image(url=url_for('uploaded_file',filename=filename))
@@ -141,7 +141,7 @@ def product_create():
         logo_id=request.json['logo_id']
     )
 
-    if request.json['images']:
+    if 'images' in request.json:
         for image_id in request.json['images']:
             image = Image.query.get(image_id)
             product.images.append(image)
@@ -163,7 +163,8 @@ def product_variant_create():
         size=request.json['size'],
         color=request.json['color'],
     )
-    if request.json['images']:
+    print(request.json['images'])
+    if request.json['images'] is not None:
         for image_id in request.json['images']:
             image = Image.query.get(image_id)
             product_variant.images.append(image)
